@@ -1,13 +1,13 @@
-import { ClassCounter } from './components/ClassCounter';
-import { Counter } from './components/Counter';
 import './styles/App.css';
 
-function App() {
+import { PostItem } from './components/PostItem';
 
+function App() {
 	return (
 		<div className='App'>
-			{/* <Counter /> */}
-			<ClassCounter/>
+			<PostItem post={{id:1, title: 'Javascript 1', body: 'Description 1'}}/>
+			<PostItem post={{id:2, title: 'Javascript 2', body: 'Description 2'}}/>
+			<PostItem post={{id:3, title: 'Javascript 3', body: 'Description 3'}}/>
 		</div>
 	);
 }
