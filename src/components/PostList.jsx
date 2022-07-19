@@ -6,8 +6,8 @@ const PostList = ({ posts, title }) => {
 		<div>
 			<h1 style={{ textAlign: 'center' }}>{title}</h1>
 			{/* key={index}  Индекс использовать не рекомендуется, поскольку при удалении и добавлении элемента индексы меняются, а ключ всегда должен быть статичным и уникальным , ключи позволяют перерисовывать не весь список а только те элементы которые изменились*/}
-			{posts.map((post) => (
-				<PostItem post={post} key={post.id} />
+			{posts.map((post, index) => (
+				<PostItem number={index + 1} post={post} key={post.id} />
 			))}
 		</div>
 	);

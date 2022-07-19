@@ -13,12 +13,19 @@ function App() {
 	]);
 
 	const [title, setTitle] = useState('');
-	const bodyInputRef = useRef();
+	const [body, setBody] = useState('');
 
 	const addNewPost = (e) => {
 		e.preventDefault();
-		console.log(title);
-        console.log(bodyInputRef.current.value);
+		const newPost = {
+			id: Date.now(),
+			title,
+			body,
+		};
+		/* Не изменяем состояние напрямую, передаем туда новый массив куда разворачиваем старый массив с уже существующими постами и в конец добавляем новый пост */
+		setPost([...posts, newPost]);
+		setTitle('');
+		setBody('');
 	};
 
 	return (
@@ -31,12 +38,13 @@ function App() {
 					type='text'
 					placeholder={'Название поста'}
 				/>
-				<input ref={bodyInputRef} type='text' />
-				{/* <MyInput
-					ref={bodyInputRef}
+
+				<MyInput
+					onChange={(e) => setBody(e.target.value)}
+					value={body}
 					type='text'
 					placeholder={'Описание поста'}
-				/> */}
+				/>
 				<MyButton onClick={addNewPost}>Создать пост</MyButton>
 			</form>
 			<PostList posts={posts} title={'Список постов'} />
