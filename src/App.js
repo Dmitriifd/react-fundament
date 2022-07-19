@@ -6,26 +6,22 @@ import MyButton from './components/UI/button/MyButton';
 import MyInput from './components/UI/input/MyInput';
 
 function App() {
-	const [posts, setPost] = useState([
+	const [posts, setPosts] = useState([
 		{ id: 1, title: 'Javascript 1', body: 'Description 1' },
 		{ id: 2, title: 'Javascript 2', body: 'Description 2' },
 		{ id: 3, title: 'Javascript 3', body: 'Description 3' },
 	]);
 
-	const [title, setTitle] = useState('');
-	const [body, setBody] = useState('');
+	const [post, setPost] = useState({
+		title: '',
+		body: '',
+	});
 
 	const addNewPost = (e) => {
 		e.preventDefault();
-		const newPost = {
-			id: Date.now(),
-			title,
-			body,
-		};
-		/* Не изменяем состояние напрямую, передаем туда новый массив куда разворачиваем старый массив с уже существующими постами и в конец добавляем новый пост */
-		setPost([...posts, newPost]);
-		setTitle('');
-		setBody('');
+		
+		setPosts([...posts, {...post, id: Date.now()}]);
+		setPost({ title: '', body: '' });
 	};
 
 	return (
@@ -33,15 +29,15 @@ function App() {
 			<form>
 				{/* Управляемый компонент */}
 				<MyInput
-					onChange={(e) => setTitle(e.target.value)}
-					value={title}
+					onChange={(e) => setPost({ ...post, title: e.target.value })}
+					value={post.title}
 					type='text'
 					placeholder={'Название поста'}
 				/>
 
 				<MyInput
-					onChange={(e) => setBody(e.target.value)}
-					value={body}
+					onChange={(e) => setPost({ ...post, body: e.target.value })}
+					value={post.body}
 					type='text'
 					placeholder={'Описание поста'}
 				/>
