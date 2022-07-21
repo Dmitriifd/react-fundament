@@ -1,6 +1,6 @@
 import './styles/App.css';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PostList from './components/PostList';
 import PostForm from './components/PostForm';
 import PostFilter from './components/PostFilter';
@@ -25,8 +25,12 @@ function App() {
 		const response = await axios.get(
 			'https://jsonplaceholder.typicode.com/posts'
 		);
-        setPosts(response.data);
+		setPosts(response.data);
 	}
+
+	useEffect(() => {
+		fetchPosts();
+	}, []);
 
 	const removePost = (post) => {
 		setPosts(posts.filter((p) => p.id !== post.id));
@@ -34,7 +38,7 @@ function App() {
 
 	return (
 		<div className='App'>
-            <MyButton onClick={fetchPosts}>Запрос</MyButton>
+			<MyButton onClick={fetchPosts}>Запрос</MyButton>
 			<MyButton style={{ marginTop: '30px' }} onClick={() => setModal(true)}>
 				Создать статью
 			</MyButton>
