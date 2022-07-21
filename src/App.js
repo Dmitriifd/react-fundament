@@ -15,6 +15,7 @@ function App() {
 	const [filter, setFilter] = useState({ sort: '', query: '' });
 	const [modal, setModal] = useState(false);
 	const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
+    const [isPostLoading, setIsPostLoading] = useState(false);
 
 	const createPost = (newPost) => {
 		setPosts([...posts, newPost]);
@@ -22,8 +23,10 @@ function App() {
 	};
 
 	async function fetchPosts() {
+        setIsPostLoading(true);
 		const posts = await PostService.getAll();
 		setPosts(posts);
+        setIsPostLoading(false);
 	}
 
 	useEffect(() => {
@@ -36,7 +39,6 @@ function App() {
 
 	return (
 		<div className='App'>
-			<MyButton onClick={fetchPosts}>Запрос</MyButton>
 			<MyButton style={{ marginTop: '30px' }} onClick={() => setModal(true)}>
 				Создать статью
 			</MyButton>
@@ -46,11 +48,12 @@ function App() {
 			<hr style={{ margin: '15px 0' }} />
 			<PostFilter filter={filter} setFilter={setFilter} />
 
-			<PostList
+            {isPostLoading ? <h1>Идет загрузка...</h1> : <PostList
 				remove={removePost}
 				posts={sortedAndSearchedPosts}
 				title={'Список постов'}
-			/>
+			/>}
+			
 		</div>
 	);
 }
