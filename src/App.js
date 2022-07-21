@@ -10,16 +10,25 @@ import { usePosts } from './hooks/usePosts';
 import PostService from './API/PostService';
 import Loader from './components/UI/Loader/Loader';
 import { useFetching } from './hooks/useFetching';
+import { getPageCount, getPagesArray } from './utils/pages';
 
 function App() {
 	const [posts, setPosts] = useState([]);
 
 	const [filter, setFilter] = useState({ sort: '', query: '' });
 	const [modal, setModal] = useState(false);
+	const [totalPages, setTotalPages] = useState(0);
+	const [limit, setLimit] = useState(10);
+	const [page, setPage] = useState(1);
 	const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
+
+	let pagesArray = getPagesArray(totalPages);
+
 	const [fetchPosts, isPostLoading, postError] = useFetching(async () => {
-		const posts = await PostService.getAll();
-		setPosts(posts);
+		const response = await PostService.getAll(limit, page);
+		setPosts(response.data);
+		const totalCount = response.headers['x-total-count'];
+		setTotalPages(getPageCount(totalCount, limit));
 	});
 
 	const createPost = (newPost) => {
@@ -28,12 +37,16 @@ function App() {
 	};
 
 	useEffect(() => {
-		fetchPosts()
-	}, []);
+		fetchPosts();
+	}, [page]);
 
 	const removePost = (post) => {
 		setPosts(posts.filter((p) => p.id !== post.id));
 	};
+
+    const changePage = (page) => {
+        setPage(page);
+    }
 
 	return (
 		<div className='App'>
@@ -45,7 +58,7 @@ function App() {
 			</MyModal>
 			<hr style={{ margin: '15px 0' }} />
 			<PostFilter filter={filter} setFilter={setFilter} />
-            {postError && <h1>Произошла ошибка</h1>}
+			{postError && <h1>Произошла ошибка</h1>}
 			{isPostLoading ? (
 				<Loader />
 			) : (
@@ -55,6 +68,17 @@ function App() {
 					title={'Список постов'}
 				/>
 			)}
+			<div className='page__wrapper'>
+				{pagesArray.map((btn) => (
+					<span
+						onClick={() => changePage(btn)}
+						key={btn}
+						className={page === btn ? 'page page__current' : 'page'}
+					>
+						{btn}
+					</span>
+				))}
+			</div>
 		</div>
 	);
 }

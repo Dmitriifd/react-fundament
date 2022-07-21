@@ -11,7 +11,7 @@ export default class PostService {
 				},
 			}
 		);
-		return response.data;
+		return response;
 	}
 
 	// static async getById(id) {
