@@ -1,6 +1,6 @@
 import './styles/App.css';
 
-import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import Navbar from './components/UI/Navbar/Navbar';
 import AppRouter from './components/AppRouter';
 
